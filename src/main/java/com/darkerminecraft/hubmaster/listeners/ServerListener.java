@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.event.Listener;
 
 @RequiredArgsConstructor
-public class ServerListener implements Listener {
+public abstract class ServerListener implements Listener {
 
-    private final HubMaster plugin;
+    public final HubMaster plugin;
 
 }

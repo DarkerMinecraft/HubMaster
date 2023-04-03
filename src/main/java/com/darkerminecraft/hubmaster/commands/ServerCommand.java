@@ -13,12 +13,12 @@ public abstract class ServerCommand extends BukkitCommand {
 
     public static final String NO_PERMISSION_MESSAGE = ChatColor.RED + "You don't have permission to execute this command!";
 
-    private final HubMaster plugin;
+    public final HubMaster plugin;
 
     private boolean permission = true;
     private CommandSource source;
 
-    protected ServerCommand(String name, HubMaster plugin) {
+    public ServerCommand(String name, HubMaster plugin) {
         super(name);
         this.plugin = plugin;
     }
@@ -59,7 +59,7 @@ public abstract class ServerCommand extends BukkitCommand {
                 if (!(sender instanceof Player)) {
                     return false;
                 }
-                return sender.isPermissionSet(getPermission());
+                return sender.isOp() || sender.isPermissionSet(getPermission());
             }
             case CONSOLE -> {
                 return !(sender instanceof Player);
@@ -68,7 +68,7 @@ public abstract class ServerCommand extends BukkitCommand {
                 if (!(sender instanceof Player)) {
                     return true;
                 }
-                return sender.isPermissionSet(getPermission());
+                return sender.isOp() || sender.isPermissionSet(getPermission());
             }
             default -> {
                 return false;
@@ -76,6 +76,6 @@ public abstract class ServerCommand extends BukkitCommand {
         }
     }
 
-    protected abstract boolean onCommand(CommandSender sender, Player playerSender, String[] args);
+    public abstract boolean onCommand(CommandSender sender, Player playerSender, String[] args);
 
 }

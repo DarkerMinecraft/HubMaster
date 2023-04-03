@@ -2,7 +2,9 @@ package com.darkerminecraft.hubmaster.commands;
 
 import com.darkerminecraft.hubmaster.HubMaster;
 import com.darkerminecraft.hubmaster.services.Service;
-import com.google.common.reflect.ClassPath;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 
@@ -17,19 +19,19 @@ public class CommandManager extends Service {
 
     @Override
     public void onStart() {
-        try {
-            ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
+        try(ScanResult scanResult =
+                new ClassGraph()
+                        .acceptPackages("com.darkerminecraft.hubmaster.commands")
+                        .enableAllInfo()
+                        .scan()) {
+                for(ClassInfo classInfo : scanResult.getSubclasses(ServerCommand.class)) {
+                    Class<? extends ServerCommand> clazz = classInfo.loadClass(ServerCommand.class);
 
-            for(ClassPath.ClassInfo classInfo : classpath.getTopLevelClasses("com.darkerminecraft.hubmaster.commands")) {
-                Class<?> clazz = classInfo.load();
-
-                if(ServerCommand.class.isAssignableFrom(clazz)) {
-                    Constructor<?> constructor = clazz.getConstructor(String.class, HubMaster.class);
+                    Constructor<? extends ServerCommand> constructor = clazz.getConstructor(String.class, HubMaster.class);
 
                     ServerCommand cmd = (ServerCommand) constructor.newInstance(clazz.getSimpleName().replace("Command", "").toLowerCase(), plugin);
                     loadCommand(cmd);
                 }
-            }
         } catch(Exception e) {
             e.printStackTrace();
         }
