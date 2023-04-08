@@ -1,5 +1,7 @@
 package com.darkerminecraft.hubmaster;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.darkerminecraft.hubmaster.commands.CommandManager;
 import com.darkerminecraft.hubmaster.listeners.ListenerManager;
 import com.darkerminecraft.hubmaster.npc.NPCManager;
@@ -13,6 +15,12 @@ public final class HubMaster extends JavaPlugin {
 
     public VotifierManager votifierManager;
     public NPCManager npcManager;
+
+    public ProtocolManager protocolManager;
+
+    public void onLoad() {
+        protocolManager = ProtocolLibrary.getProtocolManager();
+    }
 
     @Override
     public void onEnable() {

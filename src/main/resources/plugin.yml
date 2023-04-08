@@ -2,5 +2,7 @@ name: HubMaster
 version: '${version}'
 main: com.darkerminecraft.hubmaster.HubMaster
 api-version: 1.19
+depend:
+  - ProtocolLib
 softdepend:
   - Votifier

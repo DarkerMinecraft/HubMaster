@@ -1,5 +1,8 @@
 package com.darkerminecraft.hubmaster.listeners;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLib;
+import com.comphenix.protocol.events.*;
 import com.darkerminecraft.hubmaster.HubMaster;
 import com.darkerminecraft.hubmaster.npc.NPC;
 import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
@@ -9,12 +12,17 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.plugin.Plugin;
 
 public class PlayerListener extends ServerListener {
     public PlayerListener(HubMaster plugin) {
         super(plugin);
+
+
     }
 
     @EventHandler

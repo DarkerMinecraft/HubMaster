@@ -12,8 +12,8 @@ public class NPCManager extends Service {
     @Getter
     private List<NPC> activeNPCs;
 
-    public NPCManager(HubMaster plugin, String name) {
-        super(plugin, name);
+    public NPCManager(HubMaster plugin) {
+        super(plugin, "NPC Manager");
     }
 
     @Override
