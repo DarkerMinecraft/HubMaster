@@ -6,8 +6,11 @@ import com.darkerminecraft.hubmaster.commands.CommandManager;
 import com.darkerminecraft.hubmaster.listeners.ListenerManager;
 import com.darkerminecraft.hubmaster.npc.NPCManager;
 import com.darkerminecraft.hubmaster.services.ServiceManager;
+import com.darkerminecraft.hubmaster.utils.NPCStorageUtil;
 import com.darkerminecraft.hubmaster.votifier.VotifierManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Level;
 
 public final class HubMaster extends JavaPlugin {
 
@@ -24,6 +27,13 @@ public final class HubMaster extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if(getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            getLogger().log(Level.SEVERE, "Could not find PlaceholderAPI! This plugin is required.");
+            getServer().getPluginManager().disablePlugin(this);
+        }
+
+        NPCStorageUtil.setPlugin(this);
+
         serviceManager = new ServiceManager(this);
 
         votifierManager = serviceManager.addService(VotifierManager.class);

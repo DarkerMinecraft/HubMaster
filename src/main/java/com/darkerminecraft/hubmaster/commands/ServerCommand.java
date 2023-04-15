@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,12 @@ public abstract class ServerCommand extends BukkitCommand {
             sender.sendMessage(ChatColor.RED + getUsage());
         }
         return true;
+    }
+
+    @NotNull
+    @Override
+    public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
+        return onTabComplete(sender, args);
     }
 
     public void setup(CommandParameters params, CommandPermissions perms) {
@@ -77,5 +84,6 @@ public abstract class ServerCommand extends BukkitCommand {
     }
 
     public abstract boolean onCommand(CommandSender sender, Player playerSender, String[] args);
+    public abstract List<String> onTabComplete(CommandSender sender, String[] args);
 
 }

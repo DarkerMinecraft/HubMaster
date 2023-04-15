@@ -4,5 +4,6 @@ main: com.darkerminecraft.hubmaster.HubMaster
 api-version: 1.19
 depend:
   - ProtocolLib
+  - PlaceholderAPI
 softdepend:
   - Votifier

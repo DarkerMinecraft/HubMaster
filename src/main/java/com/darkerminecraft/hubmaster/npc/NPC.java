@@ -1,10 +1,12 @@
 package com.darkerminecraft.hubmaster.npc;
 
+import com.darkerminecraft.hubmaster.HubMaster;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -18,19 +20,43 @@ import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.Serializable;
 import java.util.*;
 
 @RequiredArgsConstructor
-public class NPC {
+public class NPC implements Serializable {
 
-    private final String name, texture, signature;
+    @Setter
+    @Getter
+    private String name;
+
+    @Getter
+    @Setter
+    private Map<String, String> textures;
+    @Setter
+    @Getter
+    private String command;
+    @Getter
+    @Setter
+    private Location location;
 
     @Getter
     private ServerPlayer npc;
 
     private Map<EquipmentSlot, Material> itemsOnNPC;
 
-    public void createNPC(Player player, Location location) {
+    public NPC(String name, Location location, String texture, String signature, String command) {
+        this.name = name;
+        this.textures = new HashMap<>();
+
+        this.textures.put("Value", texture);
+        this.textures.put("Signature", signature);
+
+        this.command = command;
+        this.location = location;
+    }
+
+    public void createNPC(Player player) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
         ServerPlayer sp = craftPlayer.getHandle();
 
@@ -41,15 +67,13 @@ public class NPC {
 
         GameProfile gameProfile = new GameProfile(UUID.randomUUID(), name);
 
+        String texture = textures.get("Value"), signature = textures.get("Signature");
+
         if(!texture.isEmpty() && !signature.isEmpty())
             gameProfile.getProperties().put("textures", new Property("textures", texture, signature));
 
         npc = new ServerPlayer(server, serverLevel, gameProfile);
         npc.setPos(location.getX(), location.getY(), location.getZ());
-    }
-
-    public void createNPC(Player player) {
-        createNPC(player, player.getLocation());
     }
 
     public void spawnNPC(Player player) {
